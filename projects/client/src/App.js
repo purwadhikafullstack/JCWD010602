@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import Sidebar from "./components/sidebar";
 import routes from './routes/routes';
 import { Routes, Route } from 'react-router-dom';
+import PageRegister from "./pages/pageRegister";
 
 function App() {
   // const [message, setMessage] = useState("");
