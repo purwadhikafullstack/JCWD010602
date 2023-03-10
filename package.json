@@ -25,22 +25,13 @@
   "main": "deploy.config.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ridhozhr10/JCWD010602.git"
+    "url": "git+https://github.com/Aivila/JCWD010602.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ridhozhr10/JCWD010602/issues"
+    "url": "https://github.com/Aivila/JCWD010602/issues"
   },
-  "homepage": "https://github.com/ridhozhr10/JCWD010602#readme",
-  "dependencies": {
-    "bcrypt": "^5.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "mysql2": "^3.2.0",
-    "sequelize": "^6.29.1"
-  }
+  "homepage": "https://github.com/Aivila/JCWD010602#readme"
 }
