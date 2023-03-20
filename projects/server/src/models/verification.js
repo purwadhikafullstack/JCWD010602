@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Verification.init({
     attempts: DataTypes.INTEGER,
     otpCode: DataTypes.INTEGER,
-    expiryDate: DataTypes.DATE,
+    expiryDate: {type:DataTypes.DATE,defaultValue:sequelize.NOW},
     userId:{type:DataTypes.INTEGER,allowNull:false}
   }, {
     sequelize,
