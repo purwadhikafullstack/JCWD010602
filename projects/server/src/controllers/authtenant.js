@@ -89,4 +89,4 @@ const tenantAuthController = {
     }
 }
 
-module.exports = {};
+module.exports = {tenantAuthController};
