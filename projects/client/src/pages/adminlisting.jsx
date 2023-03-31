@@ -13,6 +13,10 @@ export default function AdminListing(){
         })
     };
 
+    useEffect(() => {
+        fetchData()
+    }, [])
+
     return(
         <>
         <Flex flexDir={"row"}>
@@ -28,11 +32,12 @@ export default function AdminListing(){
                     <Button>Add Room</Button>
                 </Flex>
                 <Flex flexWrap={"wrap"} paddingX={0}>
-                    <ItemCard name="Formosa Residence" roomname="Studio Room" imgsrc="https://cf.bstatic.com/xdata/images/hotel/max500/402139045.jpg?k=5adeaa62dd406f5743e6dd0746c4597fef8a282a6f7a36c1c94c560bfef928ac&o=&hp=1"/>
-                    <ItemCard name="Formosa Residence" roomname="Studio Room" imgsrc="https://cf.bstatic.com/xdata/images/hotel/max500/402139045.jpg?k=5adeaa62dd406f5743e6dd0746c4597fef8a282a6f7a36c1c94c560bfef928ac&o=&hp=1"/>
-                    <ItemCard name="Formosa Residence" roomname="Studio Room" imgsrc="https://cf.bstatic.com/xdata/images/hotel/max500/402139045.jpg?k=5adeaa62dd406f5743e6dd0746c4597fef8a282a6f7a36c1c94c560bfef928ac&o=&hp=1"/>
-                    <ItemCard name="Formosa Residence" roomname="Studio Room" imgsrc="https://cf.bstatic.com/xdata/images/hotel/max500/402139045.jpg?k=5adeaa62dd406f5743e6dd0746c4597fef8a282a6f7a36c1c94c560bfef928ac&o=&hp=1"/>
-                    <ItemCard name="Formosa Residence" roomname="Studio Room" imgsrc="https://cf.bstatic.com/xdata/images/hotel/max500/402139045.jpg?k=5adeaa62dd406f5743e6dd0746c4597fef8a282a6f7a36c1c94c560bfef928ac&o=&hp=1"/>
+                    {   
+                        datas?.map((val) => {
+                            return <ItemCard data={val} />
+
+                        })
+                    }
                 </Flex>
             </Flex>
         </Flex>
