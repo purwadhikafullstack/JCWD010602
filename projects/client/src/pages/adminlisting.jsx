@@ -1,8 +1,18 @@
 import { Box, Flex, Link, Text, Menu, MenuButton, MenuList, MenuItem, Button, Divider, Center } from "@chakra-ui/react";
 import Sidebar from "../components/sidebar";
 import ItemCard from "../components/itemcard";
+import { axiosInstance } from '../config/config';
+import { useEffect, useState } from 'react';
 
 export default function AdminListing(){
+    const [datas, setDatas] = useState([]);
+
+    async function fetchData() {
+        await axiosInstance.get("/products").then((res) => {
+            setDatas([...res.data.result])
+        })
+    };
+
     return(
         <>
         <Flex flexDir={"row"}>
