@@ -51,7 +51,7 @@ const productController = {
             });
         }
     },
-
+    
     editProducts: async (req, res) => {
         try{
             const pid = req.query.product_id
