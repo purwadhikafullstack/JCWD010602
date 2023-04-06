@@ -4,7 +4,12 @@ const cors = require("cors");
 const { join } = require("path");
 
 const PORT = process.env.PORT || 8000;
-const {authRoutes} = require("./routes")
+const {
+  authRoutes,
+  propertyRoutes,
+  roomRoutes,
+  facilityRoutes,
+} = require("./routes");
 const app = express();
 // app.use(
 //   cors({
@@ -14,19 +19,19 @@ const app = express();
 //     ],
 //   })
 // );
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
-
-// const db = require("./models")
-// const {sequelize} = ("./models")
-// db.sequelize.sync({alter:true})
-//#region API ROUTES
+// const db = require("./models");
+// const { sequelize } = "./models";
+// db.sequelize.sync({ alter: true });
+// //#region API ROUTES
 
 // ===========================
 // NOTE : Add your routes here
-app.use("/api/auth",authRoutes)
-
+app.use("/api/auth", authRoutes);
+app.use("/api/property", propertyRoutes);
+app.use("/api/room", roomRoutes);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
@@ -62,8 +67,8 @@ app.use((err, req, res, next) => {
 //#endregion
 
 //#region CLIENT
-const clientPath = "../../client/build";
-app.use(express.static(join(__dirname, clientPath)));
+const clientPath = "/public/ROOM";
+app.use("/room_picture", express.static(join(__dirname, clientPath)));
 
 // Serve the HTML page
 app.get("*", (req, res) => {
