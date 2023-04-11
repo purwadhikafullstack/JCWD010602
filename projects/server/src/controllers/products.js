@@ -1,28 +1,32 @@
 const db = require("../models");
-const { Op } = require("sequelize")
 
 const Products = db.products;
 
 const productController = {
     getProducts: async (req, res) => {
+        const productsPerPage = 10
+
+        const page = parseInt(req.query.page) || 1;
+        const offset = (page - 1) * productsPerPage;
+
         try {
-            const q = req.query.q ? req.query.q : ""
-
-            const result = await Products.findAll({
-                where: {
-                    name: {
-                        [Op.like]: `%${q}%`
-                    }
-                }
-            })
-
-            return res.status(200).json({
-                message: 'data fetched',
-                result: result
+            const products = await Products.findAll({ 
+              limit: productsPerPage,
+              offset,
             });
-        } catch(err) {
-            return res.status(400).json({
-                message: err
+        
+            const totalProducts = await Products.count();
+        
+            const totalPages = Math.ceil(totalProducts / productsPerPage); 
+        
+            res.status(200).json({ 
+                data: products,
+                currentPage: page,
+                totalPages,
+            });
+        } catch (err) {
+            res.status(400).json({ 
+                message: err 
             });
         }
     },
