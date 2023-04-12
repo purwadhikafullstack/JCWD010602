@@ -1,7 +1,9 @@
-import React from "react";
+import Login from "../components/login";
 
-function pageLogin() {
-  return <div></div>;
+export default function PageLogin() {
+  return (
+    <>
+      <Login />
+    </>
+  );
 }
-
-export default pageLogin;
