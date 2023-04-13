@@ -12,3 +12,5 @@ router.get("/token", refreshToken);
 router.delete("/logout", Logout);
 
 export default router;
+const authRoutes = require("./auth")
+module.exports = {authRoutes};
