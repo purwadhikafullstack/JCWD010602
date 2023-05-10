@@ -8,7 +8,8 @@ const {
   authRoutes,
   propertyRoutes,
   roomRoutes,
-  facilityRoutes,
+  transactionsRoutes,
+  availRoutes,
 } = require("./routes");
 const app = express();
 // app.use(
@@ -25,13 +26,15 @@ app.use(express.json());
 // const db = require("./models");
 // const { sequelize } = "./models";
 // db.sequelize.sync({ alter: true });
-// //#region API ROUTES
+// // //#region API ROUTES
 
 // ===========================
 // NOTE : Add your routes here
 app.use("/api/auth", authRoutes);
 app.use("/api/property", propertyRoutes);
 app.use("/api/room", roomRoutes);
+app.use("/api/avail", availRoutes);
+app.use("/api/transactions", transactionsRoutes);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

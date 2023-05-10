@@ -1,6 +1,8 @@
 import PageRegister from "../pages/pageRegister";
 import VerifyEmail from "../components/verifyEmail";
 import DataRoom from "../components/dataRoom";
+import PageDataProperty from "../pages/pageDataProperty";
+import PageDataTransaction from "../pages/pageDataTransaction";
 const routes = [
   {
     path: "/register",
@@ -13,6 +15,14 @@ const routes = [
   {
     path: "/data-room",
     element: <DataRoom />,
+  },
+  {
+    path: "/data-property",
+    element: <PageDataProperty />,
+  },
+  {
+    path: "/data-transaction",
+    element: <PageDataTransaction />,
   },
 ];
 

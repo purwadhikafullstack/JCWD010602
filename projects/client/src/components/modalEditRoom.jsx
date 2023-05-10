@@ -30,12 +30,12 @@ import IsLoading from "./isLoading";
 export default function ModalEditRoom(props) {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
-  const [id, setId] = useState(props?.data?.id);
+  const id = props?.data?.id;
   const [property, setProperty] = useState([]);
   const inputFileRef = useRef(null);
   const [photos, setPhotos] = useState([]);
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [dataRoom, setDataRoom] = useState();
 
   const formik = useFormik({
@@ -58,7 +58,7 @@ export default function ModalEditRoom(props) {
     onSubmit: async (value) => {
       console.log(formik.values);
       await axiosInstance
-        .patch(`/api/room/editRoom/${id}`, formik.values)
+        .patch(`/api/room/editRoom/${props?.data.id}`, formik.values)
         .then(async (res) => {
           if (res.status === 200) {
             toast({
@@ -80,11 +80,13 @@ export default function ModalEditRoom(props) {
     },
   });
 
-  const closeModal = () => {};
+  const closeModal = () => {
+    props.setData(null);
+  };
 
   async function fetchPhotos() {
     await axiosInstance
-      .get("/api/room/photos/" + id)
+      .get("/api/room/photos/" + props?.data?.id)
       .then((res) => {
         setPhotos(res.data.result);
       })
@@ -93,20 +95,9 @@ export default function ModalEditRoom(props) {
       });
   }
 
-  async function fetchDataRoom() {
-    await axiosInstance
-      .get(`/api/room/${props?.data?.id}`)
-      .then((res) => {
-        setDataRoom(res.data.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   async function handleFile(event) {
     const formData = new FormData();
-    formData.append("roomId", id);
+    formData.append("roomId", props?.data?.id);
     for (let i = 0; i < event.target.files.length; i++) {
       formData.append("files", event.target.files[i]);
     }
@@ -120,7 +111,7 @@ export default function ModalEditRoom(props) {
   async function deletePhotos(...val) {
     await axiosInstance
       .post("/api/room/removePhotos", {
-        roomId: id,
+        roomId: props?.data?.id,
         pictureUrl: val[0].Picture.pictureUrl,
       })
       .then((res) => {
@@ -140,14 +131,8 @@ export default function ModalEditRoom(props) {
   useEffect(() => {
     fetchProperty();
     fetchPhotos();
-    fetchDataRoom();
+    console.log(photos);
   }, [id]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 50);
-  }, [props.data]);
 
   return (
     <>
@@ -157,6 +142,7 @@ export default function ModalEditRoom(props) {
         isOpen={props.isOpen}
         onClose={props.onClose}
         scrollBehavior={"inside"}
+        closeOnOverlayClick={false}
       >
         <ModalOverlay />
         <ModalContent>
@@ -165,13 +151,17 @@ export default function ModalEditRoom(props) {
           ) : (
             <>
               <ModalHeader>EDIT ROOM</ModalHeader>
-              <ModalCloseButton />
+              <ModalCloseButton
+                onClick={() => {
+                  props?.setData(null);
+                }}
+              />
               <ModalBody pb={6}>
                 <FormControl>
                   <FormLabel>Property</FormLabel>
                   <Input
                     type="text"
-                    defaultValue={property?.name}
+                    defaultValue={props?.data?.Product.name}
                     disabled="disabled"
                   />
                   {/* <Select
@@ -349,6 +339,8 @@ export default function ModalEditRoom(props) {
                         w="150px"
                         justifyContent={"space-between"}
                         key={idx}
+                        h={"210px"}
+                        // bgColor={"grey"}
                       >
                         <Box
                           h="150px"
@@ -380,7 +372,8 @@ export default function ModalEditRoom(props) {
                 <Button
                   onClick={() => {
                     props.onClose();
-                    setId(null);
+                    // setId(null);
+                    closeModal();
                   }}
                 >
                   Cancel

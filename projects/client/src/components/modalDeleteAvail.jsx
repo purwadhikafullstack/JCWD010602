@@ -13,17 +13,17 @@ import {
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../config/config";
-export default function ModalDeleteRoom(props) {
+export default function ModalDeleteAvail(props) {
   const location = useLocation();
   const id = props.id;
   const toast = useToast();
-  async function deleteRoom() {
+  async function deleteAvail() {
     await axiosInstance
-      .delete("/api/room/removeRoom/" + props.id)
+      .delete("/api/avail/deleteAvail/" + props.id)
       .then((res) => {
         if (res.status === 200) {
           toast({
-            title: "Room Created",
+            title: "Data Deleted",
             description: res.data.message,
             status: "success",
             duration: 2000,
@@ -57,7 +57,7 @@ export default function ModalDeleteRoom(props) {
             <Text>Anda yakin menghapus data ini?</Text>
           </ModalBody>
           <ModalFooter gap={2}>
-            <Button onClick={deleteRoom}>Confirm</Button>
+            <Button onClick={deleteAvail}>Confirm</Button>
             <Button onClick={props.onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

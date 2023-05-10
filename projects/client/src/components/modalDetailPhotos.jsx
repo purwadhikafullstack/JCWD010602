@@ -11,11 +11,13 @@ import {
   Box,
   IconButton,
   useBreakpointValue,
+  Center,
 } from "@chakra-ui/react";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../config/config";
 import Slider from "react-slick";
+import nophoto from "../assets/nophoto.jpg";
 const settings = {
   dots: true,
   arrows: false,
@@ -61,17 +63,28 @@ export default function ModalDetailPhotos(props) {
 
   return (
     <>
-      <Modal isCentered isOpen={props.isOpen} size="xl" onClose={props.onClose}>
+      <Modal
+        isCentered
+        isOpen={props.isOpen}
+        size="xl"
+        onClose={props.onClose}
+        closeOnOverlayClick={false}
+      >
         <ModalOverlay
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
         />
         <ModalContent>
-          <ModalCloseButton zIndex={2} />
+          <ModalCloseButton
+            zIndex={2}
+            onClick={() => {
+              props?.setId(null);
+            }}
+          />
           <ModalBody>
             <Box
               position={"relative"}
-              height={"600px"}
+              height={"400px"}
               width={"full"}
               overflow={"hidden"}
             >
@@ -115,24 +128,36 @@ export default function ModalDetailPhotos(props) {
               >
                 <BiRightArrowAlt />
               </IconButton>
-              {/* Slider */}
-              <Slider {...settings} ref={(slider) => setSlider(slider)}>
-                {cards?.map((val, index) => (
+              {cards ? (
+                <Slider {...settings} ref={(slider) => setSlider(slider)}>
+                  {cards?.map((val, index) => (
+                    <Box
+                      key={index}
+                      height={"3xl"}
+                      mt="35px"
+                      position="relative"
+                      backgroundPosition="center"
+                      backgroundRepeat="no-repeat"
+                      backgroundSize="cover"
+                      backgroundImage={`url(${val.Picture.pictureUrl})`}
+                    />
+                  ))}
+                </Slider>
+              ) : (
+                <Center>
                   <Box
-                    key={index}
                     height={"3xl"}
                     mt="35px"
-                    position="relative"
                     backgroundPosition="center"
                     backgroundRepeat="no-repeat"
                     backgroundSize="cover"
-                    backgroundImage={`url(${val.Picture.pictureUrl})`}
+                    backgroundImage={nophoto}
                   />
-                ))}
-              </Slider>
+                </Center>
+              )}
             </Box>
           </ModalBody>
-          <Box h="35px"></Box>
+          <Box h="60px"></Box>
         </ModalContent>
       </Modal>
     </>

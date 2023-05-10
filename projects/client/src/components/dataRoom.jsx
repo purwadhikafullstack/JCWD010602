@@ -13,21 +13,44 @@ import {
   useToast,
   Text,
   Icon,
+  IconButton,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../config/config";
 import ModalDeleteRoom from "./modalDeleteRoom";
 import ModalEditRoom from "./modalEditRoom";
 import ModalAddRoom from "./modalAddRoom";
 import ModalDetailPhotos from "./modalDetailPhotos";
+import ModalDeleteSpecialRoom from "./modalDeleteSpecialRoom";
+import ModalAddSpecialRoom from "./modalAddSpecialRoom";
+import ModalEditSpecialRoom from "./modalEditSpecialRoom";
+import ModalAddAvailabilityDate from "./modalAddAvailDate";
+import ModalEditAvailabilityDate from "./modalEditAvailDate";
+import ModalDeleteAvail from "./modalDeleteAvail";
 import { MdAddBox } from "react-icons/md";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import ReactPaginate from "react-paginate";
+import "../css/pagination.css";
+import { GrChapterPrevious, GrChapterNext } from "react-icons/gr";
 
 export default function DataRoom() {
   const [data, setData] = useState([]);
   const [dataSpecialPrice, setDataSpecialPrice] = useState([]);
+  const [dataEditAvailDate, setDataEditAvailDate] = useState();
   const [idDelete, setIdDelete] = useState();
+  const [idDeleteSpecialRoom, setIdDeleteSpecialRoom] = useState();
   const [idPhotos, setIdPhotos] = useState();
+  const [idAvail, setIdAvail] = useState();
   const [dataEdit, setDataEdit] = useState();
+  const [dataEditSpecialPrice, setDataEditSpecialPrice] = useState();
+  const [dataAvailDate, setDataAvailDate] = useState([]);
+  const [pageCountRoom, setPageCountRoom] = useState();
+  const [pageCountSpecialPrice, setPageCountSpecialPrice] = useState();
+  const [pageCountAvail, setPageCountAvail] = useState();
+  const pageRoom = useRef();
+  const pageSpecial = useRef();
+  const pageAvail = useRef();
+
   const {
     isOpen: isOpenDelete,
     onToggle: onToggleDelete,
@@ -48,42 +71,184 @@ export default function DataRoom() {
     onToggle: onToggleAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteSpecialRoom,
+    onToggle: onToggleDeleteSpecialRoom,
+    onClose: onCloseDeleteSpecialRoom,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenAddSpecialRoom,
+    onToggle: onToggleAddSpecialRoom,
+    onClose: onCloseAddSpecialRoom,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEditSpecialRoom,
+    onToggle: onToggleEditSpecialRoom,
+    onClose: onCloseEditSpecialRoom,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenAddAvail,
+    onToggle: onToggleAddAvail,
+    onClose: onCloseAddAvail,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEditAvail,
+    onToggle: onToggleEditAvail,
+    onClose: onCloseEditAvail,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteAvail,
+    onToggle: onToggleDeleteAvail,
+    onClose: onCloseDeleteAvail,
+  } = useDisclosure();
   const toast = useToast();
 
   async function fetchData() {
     await axiosInstance
-      .get("/api/room/")
+      .get(`/api/room?page=${pageRoom.current}`)
       .then((res) => {
-        setData(res.data.result);
+        setData(res.data.result.result);
+        setPageCountRoom(res.data.result.pageCount);
+        console.log(res.data.result.result);
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  // async function fetchDataSpecialPrice() {
-  //   await axiosInstance
-  //     .get("/api/room/specialprice")
-  //     .then((res) => {
-  //       setDataSpecialPrice(res.data.result);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
+  async function fetchDataSpecialPrice() {
+    await axiosInstance
+      .get(`/api/room/specialprice?page=${pageSpecial.current}`)
+      .then((res) => {
+        setDataSpecialPrice(res.data.result.result);
+        setPageCountSpecialPrice(res.data.result.pageCount);
+        console.log(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  async function fetchDataAvailDate() {
+    await axiosInstance
+      .get(`/api/avail?page=${pageAvail.current}`)
+      .then((res) => {
+        setDataAvailDate(res.data.result.result);
+        setPageCountAvail(res.data.result.pageCount);
+        console.log(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
+    if (dataEdit) {
+      onToggleEdit();
+    } else {
+      onCloseEdit();
+    }
+  }, [dataEdit]);
+
+  useEffect(() => {
+    if (dataEditSpecialPrice) {
+      onToggleEditSpecialRoom();
+    } else {
+      onCloseEditSpecialRoom();
+    }
+  }, [dataEditSpecialPrice]);
+
+  useEffect(() => {
+    if (dataEditAvailDate) {
+      onToggleEditAvail();
+    } else {
+      onCloseEditAvail();
+    }
+  }, [dataEditAvailDate]);
+
+  useEffect(() => {
+    if (idPhotos) {
+      onTogglePhotos();
+    } else {
+      onClosePhotos();
+    }
+  }, [idPhotos]);
+
+  useEffect(() => {
+    pageRoom.current = 1;
+    pageSpecial.current = 1;
+    pageAvail.current = 1;
     fetchData();
-    // fetchDataSpecialPrice();
+    fetchDataSpecialPrice();
+    fetchDataAvailDate();
   }, []);
 
+  function handlePageClickRoom(e) {
+    console.log(e.selected);
+    pageRoom.current = e.selected + 1;
+    fetchData();
+  }
+
+  function handlePageClickSpecialPrice(e) {
+    console.log(e.selected);
+    pageSpecial.current = e.selected + 1;
+    fetchDataSpecialPrice();
+  }
+
+  function handlePageClickAvail(e) {
+    console.log(e.selected);
+    pageAvail.current = e.selected + 1;
+    fetchDataAvailDate();
+  }
   return (
     <>
+      <ModalDeleteAvail
+        isOpen={isOpenDeleteAvail}
+        onClose={onCloseDeleteAvail}
+        id={idAvail}
+        fetchData={fetchDataAvailDate}
+      />
+      <ModalEditSpecialRoom
+        isOpen={isOpenEditSpecialRoom}
+        onClose={onCloseEditSpecialRoom}
+        fetchData={fetchDataSpecialPrice}
+        data={dataEditSpecialPrice}
+        setData={setDataEditSpecialPrice}
+      />
+
+      <ModalAddAvailabilityDate
+        isOpen={isOpenAddAvail}
+        onClose={onCloseAddAvail}
+        fetchData={fetchDataAvailDate}
+      />
+
+      <ModalEditAvailabilityDate
+        isOpen={isOpenEditAvail}
+        onClose={onCloseEditAvail}
+        fetchData={fetchDataAvailDate}
+        data={dataEditAvailDate}
+        setData={setDataEditAvailDate}
+      />
+
+      <ModalAddSpecialRoom
+        isOpen={isOpenAddSpecialRoom}
+        onClose={onCloseAddSpecialRoom}
+        fetchData={fetchDataSpecialPrice}
+      />
+
+      <ModalDeleteSpecialRoom
+        isOpen={isOpenDeleteSpecialRoom}
+        onClose={onCloseDeleteSpecialRoom}
+        id={idDeleteSpecialRoom}
+        fetchData={fetchDataSpecialPrice}
+      />
+
       <ModalEditRoom
         isOpen={isOpenEdit}
         onClose={onCloseEdit}
         data={dataEdit}
         fetchData={fetchData}
+        setData={setDataEdit}
       />
       <ModalDeleteRoom
         isOpen={isOpenDelete}
@@ -95,105 +260,124 @@ export default function DataRoom() {
         isOpen={isOpenPhotos}
         onClose={onClosePhotos}
         id={idPhotos}
+        setId={setIdPhotos}
       />
       <ModalAddRoom
         isOpen={isOpenAdd}
         onClose={onCloseAdd}
         fetchData={fetchData}
       />
-      <Flex w="100%" gap={5}>
+      <Flex
+        w="95vw"
+        gap={5}
+        flexDir={"column"}
+        justifyContent={"center"}
+        alignContent={"center"}
+      >
         <Flex
-          w="50%"
-          h="500px"
-          justifyContent="center"
+          w="92vw"
           flexDir={"column"}
           wrap={"wrap"}
-          border={"2px solid #1b1c1b"}
+          border={"2px solid #5B6D8A"}
           borderRadius={"8px"}
-          marginLeft={"30px"}
+          marginLeft="30px"
           marginTop={"40px"}
         >
-          <Text textAlign={"center"} fontSize={30}>
+          {/* <Text textAlign={"center"} fontSize={30}>
             DATA ROOM
-          </Text>
+          </Text> */}
 
-          <Flex
-            flexDir={"row"}
-            alignItems={"center"}
-            gap={1}
-            border={"1px solid #83fcae"}
-            w={"120px"}
-            h={"30px"}
-            borderRadius={"8px"}
-            cursor={"pointer"}
-            _hover={{
-              bgColor: "#bdffd4",
-            }}
-            mt={"40px"}
-            onClick={onToggleAdd}
-          >
-            <Icon as={MdAddBox} boxSize={6} color="#83fcae" />
-            <Text>New Room</Text>
-          </Flex>
           <TableContainer
-            h={"300px"}
             flexWrap={"wrap"}
-            overflowY={"scroll"}
             border={"1px solid grey"}
+            h={"400px"}
           >
             <Table variant="striped" colorScheme="teal">
-              <Thead>
+              <Thead bgColor={"#7F96BB"}>
                 <Tr>
-                  <Th>No</Th>
-                  <Th>Room Type</Th>
-                  <Th>Price</Th>
-                  <Th>Description</Th>
-                  <Th>Details</Th>
-                  <Th>Facility</Th>
-                  <Th>Photos</Th>
+                  <Th textAlign={"center"} color="white">
+                    Room ID
+                  </Th>
+                  <Th textAlign={"center"} color="white">
+                    Room Type
+                  </Th>
+                  <Th textAlign={"center"} color="white">
+                    Normal Price
+                  </Th>
+                  <Th textAlign={"center"} color="white">
+                    Description
+                  </Th>
+                  <Th textAlign={"center"} color="white">
+                    Details
+                  </Th>
+                  <Th textAlign={"center"} color="white">
+                    Facility
+                  </Th>
+                  <Th textAlign={"center"} color="white">
+                    Photos
+                  </Th>
+                  <Th textAlign={"left"}>
+                    <Button onClick={onToggleAdd} w="120px">
+                      New Room
+                    </Button>
+                  </Th>
                 </Tr>
               </Thead>
-              <Tbody>
-                {data.map((val, idx) => {
+              <Tbody h={"10px"}>
+                {data?.map((val, idx) => {
                   let num = 0;
                   return (
                     <Tr key={idx}>
-                      <Td>{idx + 1}</Td>
-                      <Td>{val.name}</Td>
-                      <Td isNumeric>{val.price}</Td>
-                      <Td>{val.description}</Td>
-                      <Td>{val.details}</Td>
-                      <Td>{val.facility}</Td>
+                      <Td fontSize={13} textAlign={"center"}>
+                        {val.id}
+                      </Td>
+                      <Td fontSize={13} textAlign={"center"}>
+                        {val.name}
+                      </Td>
+                      <Td fontSize={13} textAlign={"center"}>
+                        {val.price}
+                      </Td>
+                      <Td fontSize={13} textAlign={"center"}>
+                        {val.description}
+                      </Td>
+                      <Td fontSize={13} textAlign={"center"}>
+                        {val.details}
+                      </Td>
+                      <Td fontSize={13} textAlign={"center"}>
+                        {val.facility}
+                      </Td>
                       <Td
                         cursor={"pointer"}
                         color={"blue"}
                         onClick={() => {
                           setIdPhotos(val.id);
-                          onTogglePhotos();
                         }}
+                        fontSize={12}
+                        textAlign={"center"}
                       >
                         see all photos
                       </Td>
                       <Td>
                         <Flex gap={2}>
-                          <Button
+                          <IconButton
+                            icon={<AiFillEdit size={20} />}
                             bgColor={"green.500"}
                             onClick={() => {
                               setDataEdit(val);
-                              onToggleEdit();
                             }}
-                          >
-                            Edit
-                          </Button>
-                          <Button
+                            h={"35px"}
+                            w="55px"
+                          />
+                          <IconButton
+                            icon={<AiFillDelete size={20} />}
                             bgColor={"red.500"}
                             onClick={() => {
                               setIdDelete(val.id);
                               onToggleDelete();
                             }}
-                          >
-                            Delete
-                          </Button>
+                            h={"35px"}
+                            w="55px"
+                          />
                         </Flex>
                       </Td>
                     </Tr>
@@ -209,62 +393,249 @@ export default function DataRoom() {
               </Tfoot>
             </Table>
           </TableContainer>
+          <Flex h="40px" justifyContent={"center"}>
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel={<GrChapterNext size={15} />}
+              onPageChange={handlePageClickRoom}
+              pageRangeDisplayed={2}
+              pageCount={pageCountRoom}
+              previousLabel={<GrChapterPrevious size={15} />}
+              renderOnZeroPageCount={null}
+              marginPagesDisplayed={2}
+              containerClassName={"pagination"}
+              pageClassName={"item pagination-page "}
+              // pageLinkClassName="page-link"
+              previousClassName={"item previous"}
+              // previousLinkClassName="page-link"
+              nextClassName={"item next "}
+              // nextLinkClassName="page-link"
+              activeClassName={"item active "}
+              breakClassName={"item break-me "}
+              disabledClassName={"disabled-page"}
+            />
+          </Flex>
         </Flex>
 
-        <Flex w="50%" flexDir={"column"}>
-          <Text textAlign={"center"}> DATA SPECIAL PRICE ROOM</Text>
+        <Flex w="90vw" gap={5} marginX={"auto"}>
           <Flex
-            flexDir={"row"}
-            alignItems={"center"}
-            gap={1}
-            border={"1px solid #83fcae"}
-            w={"120px"}
-            h={"30px"}
+            w="50%"
+            border={"2px solid #5B6D8A"}
             borderRadius={"8px"}
-            cursor={"pointer"}
-            _hover={{
-              bgColor: "#bdffd4",
-            }}
+            flexDirection={"column"}
           >
-            <Icon as={MdAddBox} boxSize={6} color={"#83fcae"} />
-            <Text>New Room</Text>
+            {/* <Text textAlign={"center"}> DATA SPECIAL PRICE ROOM</Text> */}
+            <TableContainer h="400px" borderRadius={"7px"}>
+              <Table variant="striped" colorScheme="teal" size="sm">
+                <Thead bgColor={"#7F96BB"}>
+                  <Tr>
+                    <Th textAlign={"center"} color="white">
+                      Special Room ID
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      Room Type
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      Special Price
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      Start Date
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      End Date
+                    </Th>
+                    <Th textAlign={"left"}>
+                      <Button onClick={onToggleAddSpecialRoom} w="120px">
+                        New Room
+                      </Button>
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {dataSpecialPrice?.map((val, idx) => {
+                    return (
+                      <Tr key={idx}>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.id}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.Room.name}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.Room.price +
+                            val.Room.price * (val.specialPrice / 100)}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.startDate}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.endDate}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          <Flex gap={2}>
+                            <IconButton
+                              icon={<AiFillEdit size={20} />}
+                              bgColor={"green.500"}
+                              onClick={() => {
+                                setDataEditSpecialPrice(val);
+                              }}
+                              h={"35px"}
+                              w="55px"
+                            />
+                            <IconButton
+                              icon={<AiFillDelete size={20} />}
+                              bgColor={"red.500"}
+                              onClick={() => {
+                                setIdDeleteSpecialRoom(val.id);
+                                onToggleDeleteSpecialRoom();
+                              }}
+                              h={"35px"}
+                              w="55px"
+                            />
+                          </Flex>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+                <Tfoot>
+                  <Tr>
+                    <Th></Th>
+                    <Th></Th>
+                    <Th isNumeric></Th>
+                  </Tr>
+                </Tfoot>
+              </Table>
+            </TableContainer>
+            <Flex h="40px" justifyContent={"center"}>
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<GrChapterNext size={15} />}
+                onPageChange={handlePageClickSpecialPrice}
+                pageRangeDisplayed={2}
+                pageCount={pageCountSpecialPrice}
+                previousLabel={<GrChapterPrevious size={15} />}
+                renderOnZeroPageCount={null}
+                marginPagesDisplayed={2}
+                containerClassName={"pagination"}
+                pageClassName={"item pagination-page "}
+                // pageLinkClassName="page-link"
+                previousClassName={"item previous"}
+                // previousLinkClassName="page-link"
+                nextClassName={"item next "}
+                // nextLinkClassName="page-link"
+                activeClassName={"item active "}
+                breakClassName={"item break-me "}
+                disabledClassName={"disabled-page"}
+              />
+            </Flex>
           </Flex>
-          <TableContainer>
-            <Table variant="striped" colorScheme="teal">
-              <Thead>
-                <Tr>
-                  <Th>No</Th>
-                  <Th>Room Type</Th>
-                  <Th>Special Price</Th>
-                  <Th>Start Date</Th>
-                  <Th>End Date</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {dataSpecialPrice.map((val, idx) => {
-                  return (
-                    <Tr key={idx}>
-                      <Td>{val.id}</Td>
-                      <Td>{val.Room.name}</Td>
-                      <Td isNumeric>
-                        {val.Room.price +
-                          val.Room.price * (val.specialPrice / 100)}
-                      </Td>
-                      <Td>{val.startDate}</Td>
-                      <Td>{val.endDate}</Td>
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th></Th>
-                  <Th></Th>
-                  <Th isNumeric></Th>
-                </Tr>
-              </Tfoot>
-            </Table>
-          </TableContainer>
+
+          <Flex
+            w="50%"
+            border={"2px solid #5B6D8A"}
+            borderRadius={"8px"}
+            flexDir={"column"}
+          >
+            {/* <Text textAlign={"center"}> DATA SPECIAL PRICE ROOM</Text> */}
+            <TableContainer h="400px" borderRadius={"6px"}>
+              <Table variant="striped" colorScheme="teal" size={"sm"}>
+                <Thead bgColor={"#7F96BB"}>
+                  <Tr>
+                    <Th textAlign={"center"} color="white">
+                      Availability ID
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      Room Type
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      Start Date
+                    </Th>
+                    <Th textAlign={"center"} color="white">
+                      End Date
+                    </Th>
+                    <Th textAlign={"left"}>
+                      <Button onClick={onToggleAddAvail} w="120px">
+                        New Room
+                      </Button>
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {dataAvailDate?.map((val, idx) => {
+                    return (
+                      <Tr key={idx}>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.id}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.Room.name}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.startDate}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          {val.endDate}
+                        </Td>
+                        <Td textAlign={"center"} fontSize={13}>
+                          <Flex gap={2}>
+                            <IconButton
+                              icon={<AiFillEdit size={20} />}
+                              bgColor={"green.500"}
+                              onClick={() => {
+                                setDataEditAvailDate(val);
+                              }}
+                              h={"35px"}
+                              w="55px"
+                            />
+                            <IconButton
+                              icon={<AiFillDelete size={20} />}
+                              bgColor={"red.500"}
+                              onClick={() => {
+                                setIdAvail(val.id);
+                                onToggleDeleteAvail();
+                              }}
+                              h={"35px"}
+                              w="55px"
+                            />
+                          </Flex>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+                <Tfoot>
+                  <Tr>
+                    <Th></Th>
+                    <Th></Th>
+                    <Th isNumeric></Th>
+                  </Tr>
+                </Tfoot>
+              </Table>
+            </TableContainer>
+            <Flex h="40px" justifyContent={"center"}>
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<GrChapterNext size={15} />}
+                onPageChange={handlePageClickAvail}
+                pageRangeDisplayed={2}
+                pageCount={pageCountAvail}
+                previousLabel={<GrChapterPrevious size={15} />}
+                renderOnZeroPageCount={null}
+                marginPagesDisplayed={2}
+                containerClassName={"pagination"}
+                pageClassName={"item pagination-page "}
+                // pageLinkClassName="page-link"
+                previousClassName={"item previous"}
+                // previousLinkClassName="page-link"
+                nextClassName={"item next "}
+                // nextLinkClassName="page-link"
+                activeClassName={"item active "}
+                breakClassName={"item break-me "}
+                disabledClassName={"disabled-page"}
+              />
+            </Flex>
+          </Flex>
         </Flex>
       </Flex>
     </>
