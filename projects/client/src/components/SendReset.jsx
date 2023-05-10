@@ -1,3 +1,11 @@
+// PROP-5 Authorization / Authentication - As a user, I want to be able to change my password
+// Validasi user input pada change password form
+// Change password form :
+//    Old password
+//    New password
+//    Confirm new password
+// Jika user login menggunakan login dengan firebase tidak dapat mengakses fitur ini.
+
 import { useState } from "react";
 import {
   Flex,

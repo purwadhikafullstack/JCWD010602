@@ -1,3 +1,10 @@
+// PROP-4 Authorization / Authentication - As a user, I want to input my username/email and password, so that I can login to the web app
+// Validasi user input pada login form
+// User dapat login menggunakan metode dari firebase atau pun lainnya (login dengan facebook, phone number, etc)
+// Login form :
+//   Email / phone number
+//   Password
+
 import React, { useState } from "react";
 import {
   FormControl,
@@ -26,9 +33,22 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // ;;;
+    try {
+      const response = await fetch("http://localhost:3001/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const customTheme = extendTheme({

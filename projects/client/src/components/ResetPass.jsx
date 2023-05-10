@@ -1,3 +1,13 @@
+// PROP-6 Authorization / Authentication - As a user, I want to be able to reset my password
+// Pada saat di-submit, akan dikirimkan email untuk memproses reset password
+// Send reset password form :
+//   Email
+// Reset password form :
+//   New password
+//   Confirm new password
+// Validasi user input pada kedua form
+// Jika user login menggunakan login dengan firebase tidak dapat mengakses fitur ini.
+
 import { useState } from "react";
 import {
   Flex,

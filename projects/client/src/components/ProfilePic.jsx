@@ -1,3 +1,7 @@
+// PROP-9 Profiling - As a user, I want to update my profile picture
+// Validasi terhadap gambar yang diupload, ekstensi yang diperbolehkan hanya .jpg, .png dan .gif
+// Validasi max size 1MB
+
 import { useState } from "react";
 import {
   Box,

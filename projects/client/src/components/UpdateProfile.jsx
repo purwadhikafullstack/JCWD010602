@@ -1,3 +1,7 @@
+// PROP-8 Profiling - As a user, I want to update my personal data such as name, gender, email and birthdate
+// Update profile form : Name / Email / Gender / Birthdate
+// Validasi data pada update profile form
+
 import React, { useState } from "react";
 import {
   FormControl,
