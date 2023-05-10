@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
     /**
@@ -13,21 +11,25 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Transaction.init({
-    paymentStatus: DataTypes.BOOLEAN,
-    paymentSlip: DataTypes.STRING,
-    checkInDate: DataTypes.DATE,
-    checkOutDate: DataTypes.DATE,
-    duration:DataTypes.INTEGER,
-    totalPrice:DataTypes.INTEGER,
-    invoiceNo: DataTypes.INTEGER,
-    status: DataTypes.BOOLEAN,
-    userId:{type:DataTypes.INTEGER,allowNull:false},
-    roomId:{type:DataTypes.INTEGER,allowNull:false},
-    avalabilityId:{type:DataTypes.INTEGER,allowNull:false},
-  }, {
-    sequelize,
-    modelName: 'Transaction',
-  });
+  Transaction.init(
+    {
+      paymentStatus: DataTypes.BOOLEAN,
+      paymentSlip: DataTypes.STRING,
+      checkInDate: DataTypes.DATEONLY,
+      checkOutDate: DataTypes.DATEONLY,
+      duration: DataTypes.INTEGER,
+      totalPrice: DataTypes.INTEGER,
+      invoiceNo: DataTypes.INTEGER,
+      status: DataTypes.STRING,
+      userId: { type: DataTypes.INTEGER, allowNull: false },
+      roomId: { type: DataTypes.INTEGER, allowNull: false },
+      availabilityId: { type: DataTypes.INTEGER, allowNull: false },
+      createdAt: DataTypes.DATEONLY,
+    },
+    {
+      sequelize,
+      modelName: "Transaction",
+    }
+  );
   return Transaction;
 };
