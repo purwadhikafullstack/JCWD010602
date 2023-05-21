@@ -5,32 +5,77 @@ const Room = db.room;
 const User = db.user;
 const Property = db.product;
 const Tenant = db.tenant;
-const { Op, QueryTypes } = require("sequelize");
+const { Op, QueryTypes, Sequelize } = require("sequelize");
 const transactionsControllers = {
   getTransMenungguPembayaran: async (req, res) => {
     try {
+      const search = req.body.search;
+      const searchby = req.body.searchby;
       const page = parseInt(req.query.page);
       const limit = 5;
       const startDIndex = (page - 1) * limit;
       const lastIndex = page * limit;
+      let getData;
 
-      const getData = await Transactions.findAll({
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: Room,
-            include: {
-              model: Property,
-              // where: { tenantId: 1 },
+      if (search && searchby === "fullname") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+              where: {
+                [`${searchby}`]: search,
+              },
             },
+            {
+              model: Room,
+              include: {
+                model: Property,
+                // where: { tenantId: 1 },
+              },
+            },
+          ],
+          where: {
+            status: "MENUNGGU PEMBAYARAN",
           },
-        ],
-        where: {
-          status: "MENUNGGU PEMBAYARAN",
-        },
-      });
+        });
+      } else if (search && searchby === "id") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: {
+                model: Property,
+                // where: { tenantId: 1 },
+              },
+            },
+          ],
+          where: {
+            [`${searchby}`]: search,
+            status: "MENUNGGU PEMBAYARAN",
+          },
+        });
+      } else if (search === undefined || searchby === undefined) {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: {
+                model: Property,
+                // where: { tenantId: 1 },
+              },
+            },
+          ],
+          where: {
+            status: "MENUNGGU PEMBAYARAN",
+          },
+        });
+      }
 
       const results = {};
       results.totalData = getData.length;
@@ -58,30 +103,82 @@ const transactionsControllers = {
   },
   getTransDibatalkan: async (req, res) => {
     try {
+      const search = req.body.search;
+      const searchby = req.body.searchby;
       const page = parseInt(req.query.page);
       const limit = 5;
       const startDIndex = (page - 1) * limit;
       const lastIndex = page * limit;
-
-      const getData = await Transactions.findAll({
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: Room,
-            include: [
-              {
-                model: Property,
-                where: { tenantId: 1 },
+      let getData;
+      console.log(searchby);
+      console.log(search);
+      if (search && searchby == "fullname") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+              where: {
+                [`${searchby}`]: search,
               },
-            ],
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "DIBATALKAN",
           },
-        ],
-        where: {
-          status: "DIBATALKAN",
-        },
-      });
+        });
+      } else if (search && searchby === "id") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            [`${searchby}`]: search,
+            status: "DIBATALKAN",
+          },
+        });
+      } else if (search === undefined || searchby === undefined) {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "DIBATALKAN",
+          },
+        });
+      }
+
+      console.log(getData);
 
       const results = {};
       results.totalData = getData.length;
@@ -109,30 +206,78 @@ const transactionsControllers = {
   },
   getTransMenungguKonfirmasiPembayaran: async (req, res) => {
     try {
+      const search = req.body.search;
+      const searchby = req.body.searchby;
       const page = parseInt(req.query.page);
       const limit = 5;
       const startDIndex = (page - 1) * limit;
       const lastIndex = page * limit;
-
-      const getData = await Transactions.findAll({
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: Room,
-            include: [
-              {
-                model: Property,
-                where: { tenantId: 1 },
+      let getData;
+      if (search && searchby === "fullname") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+              where: {
+                [`${searchby}`]: search,
               },
-            ],
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "MENUNGGU KONFIRMASI PEMBAYARAN",
           },
-        ],
-        where: {
-          status: "MENUNGGU KONFIRMASI PEMBAYARAN",
-        },
-      });
+        });
+      } else if (search && searchby === "id") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            [`${searchby}`]: search,
+            status: "MENUNGGU KONFIRMASI PEMBAYARAN",
+          },
+        });
+      } else if (search === undefined || searchby === undefined) {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "MENUNGGU KONFIRMASI PEMBAYARAN",
+          },
+        });
+      }
 
       const results = {};
       results.totalData = getData.length;
@@ -160,30 +305,79 @@ const transactionsControllers = {
   },
   getTransPembayaranBerhasil: async (req, res) => {
     try {
+      const search = req.body.search;
+      const searchby = req.body.searchby;
       const page = parseInt(req.query.page);
       const limit = 5;
       const startDIndex = (page - 1) * limit;
       const lastIndex = page * limit;
+      let getData;
 
-      const getData = await Transactions.findAll({
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: Room,
-            include: [
-              {
-                model: Property,
-                where: { tenantId: 1 },
+      if (search && searchby === "fullname") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+              where: {
+                [`${searchby}`]: search,
               },
-            ],
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "PEMBAYARAN BERHASIL",
           },
-        ],
-        where: {
-          status: "PEMBAYARAN BERHASIL",
-        },
-      });
+        });
+      } else if (search && searchby === "id") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            [`${searchby}`]: search,
+            status: "PEMBAYARAN BERHASIL",
+          },
+        });
+      } else if (search === undefined || searchby === undefined) {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "PEMBAYARAN BERHASIL",
+          },
+        });
+      }
 
       const results = {};
       results.totalData = getData.length;
@@ -211,30 +405,79 @@ const transactionsControllers = {
   },
   getTransBerhasil: async (req, res) => {
     try {
+      const search = req.body.search;
+      const searchby = req.body.searchby;
       const page = parseInt(req.query.page);
       const limit = 5;
       const startDIndex = (page - 1) * limit;
       const lastIndex = page * limit;
+      let getData;
 
-      const getData = await Transactions.findAll({
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: Room,
-            include: [
-              {
-                model: Property,
-                where: { tenantId: 1 },
+      if (search && searchby === "fullname") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+              where: {
+                [`${searchby}`]: search,
               },
-            ],
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "BERHASIL",
           },
-        ],
-        where: {
-          status: "BERHASIL",
-        },
-      });
+        });
+      } else if (search && searchby === "id") {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            [`${searchby}`]: search,
+            status: "BERHASIL",
+          },
+        });
+      } else if (search === undefined || searchby === undefined) {
+        getData = await Transactions.findAll({
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: Room,
+              include: [
+                {
+                  model: Property,
+                  where: { tenantId: 1 },
+                },
+              ],
+            },
+          ],
+          where: {
+            status: "BERHASIL",
+          },
+        });
+      }
 
       const results = {};
       results.totalData = getData.length;

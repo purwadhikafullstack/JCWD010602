@@ -36,8 +36,6 @@ const availControllers = {
         },
       });
 
-      console.log(Boolean(findAvailDate.length > 0));
-
       if (findSpecialPrice.length > 0 || findAvailDate.length > 0) {
         return res.status(201).json({
           message: "Tanggal ini tidak dapat digunakan",
@@ -106,6 +104,42 @@ const availControllers = {
           message: "Pastikan data yang anda masukkan lengkap",
         });
       }
+
+      const findSpecialPrice = await RoomSpecialPrice.findAll({
+        where: {
+          [Op.or]: [
+            { startDate: { [Op.between]: [startDate, endDate] } },
+            { endDate: { [Op.between]: [startDate, endDate] } },
+          ],
+        },
+      });
+
+      const findAvailDate = await Availaibility.findAll({
+        where: {
+          [Op.and]: [
+            { roomId: roomId },
+            {
+              [Op.or]: [
+                { startDate: { [Op.between]: [startDate, endDate] } },
+                { endDate: { [Op.between]: [startDate, endDate] } },
+              ],
+            },
+          ],
+        },
+      });
+
+      if (findSpecialPrice.length > 0 || findAvailDate.length > 0) {
+        return res.status(201).json({
+          message: "Tanggal ini tidak dapat digunakan",
+        });
+      }
+
+      if (startDate > endDate) {
+        return res.status(202).json({
+          message: "Mohon periksa kembali tanggal yang anda masukkan",
+        });
+      }
+
       const editAvail = await Availaibility.update(
         {
           ...req.body,
@@ -120,19 +154,17 @@ const availControllers = {
       console.log(err);
     }
   },
-  deleteAvail : async (req,res) =>{
+  deleteAvail: async (req, res) => {
     try {
-      const id = req.params.id
-      await Availaibility.destroy(
-        {where:{id:id}}
-      )
+      const id = req.params.id;
+      await Availaibility.destroy({ where: { id: id } });
       res.status(200).json({
-        message: "Data Berhasil Dihapus"
-      })
+        message: "Data Berhasil Dihapus",
+      });
     } catch (err) {
       console.log(err);
     }
-  }
+  },
 };
 
 module.exports = availControllers;

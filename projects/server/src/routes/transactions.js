@@ -3,20 +3,20 @@ const router = express.Router();
 
 const { transactionsControllers } = require("../controllers");
 
-router.get(
+router.post(
   "/menunggupembayaran",
   transactionsControllers.getTransMenungguPembayaran
 );
-router.get("/dibatalkan", transactionsControllers.getTransDibatalkan);
-router.get(
+router.post("/dibatalkan", transactionsControllers.getTransDibatalkan);
+router.post(
   "/menunggukonfirmasipembayaran",
   transactionsControllers.getTransMenungguKonfirmasiPembayaran
 );
-router.get(
+router.post(
   "/pembayaranberhasil",
   transactionsControllers.getTransPembayaranBerhasil
 );
-router.get("/berhasil", transactionsControllers.getTransBerhasil);
+router.post("/berhasil", transactionsControllers.getTransBerhasil);
 router.post("/cancelTrans", transactionsControllers.cancelTrans);
 router.post("/rejectTrans", transactionsControllers.rejectTrans);
 router.post("/approvedTrans", transactionsControllers.approvedTrans);

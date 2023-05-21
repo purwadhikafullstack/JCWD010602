@@ -1,8 +1,9 @@
 import PageRegister from "../pages/pageRegister";
 import VerifyEmail from "../components/verifyEmail";
-import DataRoom from "../components/dataRoom";
+import PageDataRoom from "../pages/pageDataRoom";
 import PageDataProperty from "../pages/pageDataProperty";
 import PageDataTransaction from "../pages/pageDataTransaction";
+import Sidebar from "../components/sidebarwithHeader";
 const routes = [
   {
     path: "/register",
@@ -14,8 +15,9 @@ const routes = [
   },
   {
     path: "/data-room",
-    element: <DataRoom />,
+    element: <PageDataRoom />,
   },
+
   {
     path: "/data-property",
     element: <PageDataProperty />,
@@ -23,6 +25,10 @@ const routes = [
   {
     path: "/data-transaction",
     element: <PageDataTransaction />,
+  },
+  {
+    path: "/sidebar",
+    element: <Sidebar />,
   },
 ];
 

@@ -268,20 +268,21 @@ export default function DataRoom() {
         fetchData={fetchData}
       />
       <Flex
-        w="95vw"
+        // w="92vw"
         gap={5}
         flexDir={"column"}
         justifyContent={"center"}
         alignContent={"center"}
+        marginLeft={"200px"}
       >
         <Flex
-          w="92vw"
+          w="80vw"
           flexDir={"column"}
           wrap={"wrap"}
           border={"2px solid #5B6D8A"}
           borderRadius={"8px"}
           marginLeft="30px"
-          marginTop={"40px"}
+          // marginTop={"40px"}
         >
           {/* <Text textAlign={"center"} fontSize={30}>
             DATA ROOM
@@ -334,8 +335,8 @@ export default function DataRoom() {
                       <Td fontSize={13} textAlign={"center"}>
                         {val.name}
                       </Td>
-                      <Td fontSize={13} textAlign={"center"}>
-                        {val.price}
+                      <Td fontSize={13} textAlign={"left"}>
+                        Rp.{val?.price?.toLocaleString()}
                       </Td>
                       <Td fontSize={13} textAlign={"center"}>
                         {val.description}
@@ -417,7 +418,7 @@ export default function DataRoom() {
           </Flex>
         </Flex>
 
-        <Flex w="90vw" gap={5} marginX={"auto"}>
+        <Flex w="80vw" gap={3} marginLeft={"28px"} marginBottom={"20px"}>
           <Flex
             w="50%"
             border={"2px solid #5B6D8A"}
@@ -461,9 +462,12 @@ export default function DataRoom() {
                         <Td textAlign={"center"} fontSize={13}>
                           {val.Room.name}
                         </Td>
-                        <Td textAlign={"center"} fontSize={13}>
-                          {val.Room.price +
-                            val.Room.price * (val.specialPrice / 100)}
+                        <Td textAlign={"left"} fontSize={13}>
+                          Rp.{" "}
+                          {(
+                            val.Room.price +
+                            val.Room.price * (val.specialPrice / 100)
+                          ).toLocaleString()}
                         </Td>
                         <Td textAlign={"center"} fontSize={13}>
                           {val.startDate}

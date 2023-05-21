@@ -1,15 +1,16 @@
-import { Flex } from "@chakra-ui/react";
-import DataTransaction from "../components/dataTransaction";
+import DataRoom from "../components/dataRoom";
 import Sidebar from "../components/sidebarwithHeader";
 import Navbar from "../components/navbar";
-export default function PageDataTransaction() {
+import { Flex } from "@chakra-ui/react";
+
+export default function PageDataRoom() {
   return (
     <>
       <Flex>
         <Sidebar />
         <Flex flexDir={"column"} w="full" gap={2}>
           <Navbar />
-          <DataTransaction />
+          <DataRoom />
         </Flex>
       </Flex>
     </>

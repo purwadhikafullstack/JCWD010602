@@ -44,55 +44,49 @@ export default function ModalEditSpecialRoom(props) {
       specialPrice: Yup.number().required("Tentukan special price !!"),
     }),
     enableReinitialize: true,
-    onSubmit: async (value) => {
-      const { roomId, startDate, endDate } = value;
-
-      const formData = new FormData();
-      formData.append("roomId", roomId);
-      formData.append("startDate", startDate);
-      formData.append("endDate", endDate);
-
-      await axiosInstance
-        .patch(`/api/avail/editAvail/${props?.data?.id}`, formik.values)
-        .then((res) => {
-          if (res.status === 200) {
-            toast({
-              title: "Data Edited",
-              description: res.data.message,
-              status: "success",
-              duration: 2000,
-              isClosable: true,
-            });
-            props.fetchData();
-            props.onClose();
-          } else {
-            toast({
-              title: "Info",
-              description: res.data.message,
-              status: "info",
-              duration: 2000,
-              isClosable: true,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
   });
 
-  async function fetchRoom() {
-    await axiosInstance.get("/api/room/").then((res) => {
-      setRoom(res.data.result);
-      console.log(res.data.result);
-    });
+  async function editData() {
+    await axiosInstance
+      .patch(`/api/avail/editAvail/${props?.data?.id}`, formik.values)
+      .then((res) => {
+        if (res.status === 200) {
+          toast({
+            title: "Data Edited",
+            description: res.data.message,
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+          props.fetchData();
+          props.onClose();
+        } else {
+          toast({
+            title: "Info",
+            description: res.data.message,
+            status: "info",
+            duration: 2000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  useEffect(() => {
-    fetchRoom();
-    console.log(props.data);
-    console.log(formik.values.endDate);
-  }, [props.data]);
+  // async function fetchRoom() {
+  //   await axiosInstance.get("/api/room/").then((res) => {
+  //     setRoom(res.data.result);
+  //     console.log(res.data.result);
+  //   });
+  // }
+
+  // useEffect(() => {
+  //   fetchRoom();
+  //   console.log(props.data);
+  //   console.log(formik.values.endDate);
+  // }, [props.data]);
   return (
     <>
       <Modal
@@ -189,7 +183,7 @@ export default function ModalEditSpecialRoom(props) {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={formik.handleSubmit}>
+            <Button colorScheme="blue" mr={3} onClick={editData}>
               Save
             </Button>
             <Button
