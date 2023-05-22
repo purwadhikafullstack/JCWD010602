@@ -50,6 +50,38 @@ const routes = [
     path: "/sales-report",
     element: <SalesReport />,
   },
+  {
+    path: "/tenant",
+    element: <AdminListing />,
+  },
+  {
+    path: "tenantregister",
+    element: <TenantRegister />,
+  },
+  {
+    path: "rooms",
+    element: <Rooms />,
+  },
+  {
+    path: "/register",
+    element: <PageRegister />,
+  },
+  {
+    path: "/verification",
+    element: <VerifyEmail />,
+  },
+  {
+    path: "/data-room",
+    element: <DataRoom />,
+  },
+  {
+    path: "/data-property",
+    element: <PageDataProperty />,
+  },
+  {
+    path: "/data-transaction",
+    element: <PageDataTransaction />,
+  },
 ];
 
 export default routes;

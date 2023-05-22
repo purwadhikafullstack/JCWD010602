@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN,
     gender: DataTypes.STRING,
-    birtdate: {type:DataTypes.DATE,allowNull:true},
+    birtdate: {type:DataTypes.DATEONLY,allowNull:true},
     profilePicture: DataTypes.STRING,
     isTenant: DataTypes.BOOLEAN,
     suspend:{type:DataTypes.DATE}
