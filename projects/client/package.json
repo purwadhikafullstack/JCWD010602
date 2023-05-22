@@ -4,19 +4,41 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.17",
+    "@chakra-ui/react": "^2.5.1",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
     "axios": "^0.27.2",
+    "firebase": "^9.17.2",
+    "formik": "^2.2.9",
+    "framer-motion": "^10.0.1",
     "react": "^18.2.0",
+    "react-big-calendar": "^1.6.9",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-paginate": "^8.2.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "react-social-login": "^3.4.17",
+    "react-select": "^5.7.1",
+    "react-slick": "^0.29.0",
+    "react-social-login-buttons": "^3.6.1",
+    "reactjs-social-login": "^2.6.2",
+    "toposort": "^2.0.2",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.0.2",
+    "yup-password": "^0.2.2"
   },
   "eslintConfig": {
     "extends": [

@@ -19,5 +19,19 @@
   },
   "workspaces": [
     "projects/*"
-  ]
+  ],
+  "description": "This is monorepo contain frontend project using ReactJS and backend project using ExpressJS.",
+  "version": "1.0.0",
+  "main": "deploy.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aivila/JCWD010602.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aivila/JCWD010602/issues"
+  },
+  "homepage": "https://github.com/Aivila/JCWD010602#readme"
 }
